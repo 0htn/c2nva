@@ -1,0 +1,34 @@
+  <style>
+    /* CSS styles for the canvas, sheets, and tools */
+    .canvas-container {
+      display: flex;
+
+    }
+    .sheets-container {
+      width: 150px;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    .sheet {
+      border: 1px solid #000;
+      margin-bottom: 5px;
+      padding: 5px;
+      cursor: pointer;
+    }
+    .canvas {
+      border: 1px solid #000;
+      margin-left: 20px;
+    }
+    .tools {
+      margin-left: 20px;
+    }
+    .saved-sheets-container {
+      margin-top: 20px;
+    }
+    .saved-sheet {
+      border: 1px solid #000;
+      margin-bottom: 5px;
+      padding: 5px;
+      cursor: pointer;
+    }
+  </style>
