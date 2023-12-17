@@ -48,6 +48,8 @@
     <div class="tools">
       <button id="penTool">Pen</button>
       <button id="smoothPenTool">Smooth Pen</button>
+      <button id="fcPenTool">Fountain-Flower-Curtain-Stair-Shelf-MarkPoint Pen</button>
+       <button id="grassPenTool">Grass-Tree-Eyebrow-Eye-Light-QuickColor Pen</button>
       <button id="fillBackgroundTool">Fill Background</button>
        <button id="drawLineTool">Fill</button>
        <select id="penStyle">
@@ -564,6 +566,80 @@ canvas.addEventListener('mouseup', () => {
 
       ctx.stroke();
     }
+
+    // Function to draw
+    function drawFc(x, y) {
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x, y - 50);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(x, y - 60, 10, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(x, y - 50);
+      ctx.lineTo(x - 20, y - 70);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(x, y - 50);
+      ctx.lineTo(x + 20, y - 70);
+      ctx.stroke();
+    }
+
+    document.getElementById('fcPenTool').addEventListener('click', () => {
+      selectedTool = 'fcPenTool';
+      ctx.globalCompositeOperation = 'source-over'; 
+    });
+    canvas.addEventListener('click', drawFcOnClick);
+
+    function drawFcOnClick(e) {
+      const x = e.clientX - canvas.getBoundingClientRect().left;
+      const y = e.clientY - canvas.getBoundingClientRect().top;
+
+      if (selectedTool === 'fcPenTool') {
+        drawFc(x, y);
+      }
+    }
+
+//______
+document.getElementById('grassPenTool').addEventListener('click', () => {
+  selectedTool = 'grassPen';
+  ctx.globalCompositeOperation = 'source-over'; // Default drawing mode
+});
+let isDrawingGrassPen = false;
+
+canvas.addEventListener('mousedown', (e) => {
+  if (selectedTool === 'grassPen') {
+    isDrawingGrassPen = true;
+    drawGrassPen(e);
+  }
+});
+
+canvas.addEventListener('mousemove', (e) => {
+  if (isDrawingGrassPen) {
+    drawGrassPen(e);
+  }
+});
+
+canvas.addEventListener('mouseup', () => {
+  isDrawingGrassPen = false;
+});
+
+function drawGrassPen(e) {
+  const x = e.clientX - canvas.getBoundingClientRect().left;
+  const y = e.clientY - canvas.getBoundingClientRect().top;
+
+  // Customize the grass pen drawing logic based on your requirements
+  // For example, you can draw short lines to simulate grass strokes
+
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x + 5, y + 5); // Customize the length of grass stroke
+  ctx.stroke();
+}
 
   </script>
 </body>
