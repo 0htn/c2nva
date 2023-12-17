@@ -47,13 +47,14 @@
     </div>
     <div class="tools">
       <button id="penTool">Pen</button>
-<button id="fillBackgroundTool">Fill Background</button>
-<button id="drawLineTool">Fill</button>
-<select id="penStyle">
-  <option value="normal">Normal</option>
-  <option value="dotted">Dotted</option>
-  <option value="dashed">Dashed</option>
-</select>
+      <button id="smoothPenTool">Smooth Pen</button>
+      <button id="fillBackgroundTool">Fill Background</button>
+       <button id="drawLineTool">Fill</button>
+       <select id="penStyle">
+       <option value="normal">Normal</option>
+       <option value="dotted">Dotted</option>
+      <option value="dashed">Dashed</option>
+       </select>
       <button id="highlighterTool">Highlighter</button>
       <button id="eraserTool">Eraser</button>
 <select id="shapeType">
@@ -496,6 +497,73 @@ canvas.addEventListener('mousemove', (e) => {
 canvas.addEventListener('mouseup', () => {
   isDrawingLine = false;
 });
+
+    // Add an event listener for the smooth pen tool
+    document.getElementById('smoothPenTool').addEventListener('click', () => {
+      selectedTool = 'smoothPen';
+      ctx.globalCompositeOperation = 'source-over'; // Default drawing mode
+    });
+
+    // Event listeners for the canvas to handle smooth pen drawing
+    canvas.addEventListener('mousedown', startSmoothPen);
+    canvas.addEventListener('mousemove', drawSmoothPen);
+    canvas.addEventListener('mouseup', stopSmoothPen);
+    canvas.addEventListener('mouseout', stopSmoothPen);
+
+    let smoothPenPoints = [];
+
+    function startSmoothPen(e) {
+      if (selectedTool === 'smoothPen') {
+        isDrawing = true;
+        smoothPenPoints = [];
+        addSmoothPenPoint(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+      }
+    }
+
+    function drawSmoothPen(e) {
+      if (isDrawing && selectedTool === 'smoothPen') {
+        addSmoothPenPoint(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+        drawSmoothLine();
+      }
+    }
+
+    function stopSmoothPen() {
+      if (isDrawing && selectedTool === 'smoothPen') {
+        isDrawing = false;
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+        drawSmoothLine();
+      }
+    }
+
+    function addSmoothPenPoint(x, y) {
+      smoothPenPoints.push({
+        x,
+        y
+      });
+    }
+
+    function drawSmoothLine() {
+      if (smoothPenPoints.length < 3) return;
+
+      ctx.beginPath();
+      ctx.moveTo(smoothPenPoints[0].x, smoothPenPoints[0].y);
+
+      for (let i = 1; i < smoothPenPoints.length - 2; i++) {
+        const xc = (smoothPenPoints[i].x + smoothPenPoints[i + 1].x) / 2;
+        const yc = (smoothPenPoints[i].y + smoothPenPoints[i + 1].y) / 2;
+        ctx.quadraticCurveTo(smoothPenPoints[i].x, smoothPenPoints[i].y, xc, yc);
+      }
+
+      ctx.quadraticCurveTo(
+        smoothPenPoints[smoothPenPoints.length - 2].x,
+        smoothPenPoints[smoothPenPoints.length - 2].y,
+        smoothPenPoints[smoothPenPoints.length - 1].x,
+        smoothPenPoints[smoothPenPoints.length - 1].y
+      );
+
+      ctx.stroke();
+    }
 
   </script>
 </body>
