@@ -50,6 +50,8 @@
       <button id="smoothPenTool">Smooth Pen</button>
       <button id="fcPenTool">Fountain-Flower-Curtain-Stair-Shelf-MarkPoint Pen</button>
        <button id="grassPenTool">Grass-Tree-Eyebrow-Eye-Light-QuickColor Pen</button>
+       <button id="flowerPenTool">Flower Pen</button>
+       <button id="cropButton">WaterPen</button>
       <button id="fillBackgroundTool">Fill Background</button>
        <button id="drawLineTool">Fill</button>
        <select id="penStyle">
@@ -75,7 +77,6 @@
       <button id="deleteButton">Delete Selected Sheet</button>
 <label for="opacityRange">Opacity:</label>
   <input type="range" id="opacityRange" min="0" max="1" step="0.1" value="1">
- <button id="cropButton">WaterPen</button>
     </div>
   </div>
 
@@ -604,7 +605,6 @@ canvas.addEventListener('mouseup', () => {
       }
     }
 
-//______
 document.getElementById('grassPenTool').addEventListener('click', () => {
   selectedTool = 'grassPen';
   ctx.globalCompositeOperation = 'source-over'; // Default drawing mode
@@ -640,6 +640,37 @@ function drawGrassPen(e) {
   ctx.lineTo(x + 5, y + 5); // Customize the length of grass stroke
   ctx.stroke();
 }
+
+document.getElementById('flowerPenTool').addEventListener('click', () => {
+  selectedTool = 'flowerPen';
+  ctx.globalCompositeOperation = 'source-over'; // Default drawing mode
+});
+function drawFlowerPen(x, y) {
+  const petalSize = 10;
+  const petalCount = 6;
+
+  ctx.fillStyle = selectedColor;
+
+  for (let i = 0; i < petalCount; i++) {
+    const angle = (i / petalCount) * 2 * Math.PI;
+    const petalX = x + petalSize * Math.cos(angle);
+    const petalY = y + petalSize * Math.sin(angle);
+
+    ctx.beginPath();
+    ctx.arc(petalX, petalY, petalSize, 0, 2 * Math.PI);
+    ctx.fill();
+  }
+}
+canvas.addEventListener('click', (e) => {
+  if (selectedTool === 'flowerPen') {
+    drawFlowerPen(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+  } else if (selectedTool === 'fillBackground') {
+    fillBackground();
+  }
+});
+
+//______
+
 
   </script>
 </body>
