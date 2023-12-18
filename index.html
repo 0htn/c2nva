@@ -51,7 +51,32 @@
       <button id="fcPenTool">Fountain-Flower-Curtain-Stair-Shelf-MarkPoint Pen</button>
        <button id="grassPenTool">Grass-Tree-Eyebrow-Eye-Light-QuickColor Pen</button>
        <button id="flowerPenTool">Flower Pen</button>
+      <button id="sPen">Sofa-Fence-Bug-Sink-Candle-Piano-Splash-Hair-smallWheel-smallCrowd+sitting/standing-HighHeelShoes-Chair/Table/Bed/Tent-Earing Pen</button>
+<label for="leafSize">Leaf Size:</label>
+<select id="leafSize">
+  <option value="select">Select</option>
+  <option value="small">Small</option>
+  <option value="medium">Medium</option>
+  <option value="large">Large</option>
+</select>
+<button id="leafPen">Leaf-EyeIris Pen</button>
+<label for="noseSize">Nose Size:</label>
+<select id="noseSize">
+  <option value="select">Select</option>
+  <option value="small">Small</option>
+  <option value="medium">Medium</option>
+  <option value="large">Large</option>
+</select>
+<button id="nose">Nose-Lamp-Dress-Chocolate Pen</button>
+<button id="eyeOutlinePen">Eye Outline Pen</button>
+<button id="eyelidOutlinePen">Eyelid Outline Pen</button>
+<button id="headOutlinePen">Head Outline Pen</button>
+<button id="doorPen">Door Pen</button>
+     <button id="dmPen">Diamond Shape</button>
        <button id="cropButton">WaterPen</button>
+<button id="insertTextButton">Insert Text</button>
+<button id="toggleCoordinatesButton">Toggle Coordinates</button>
+<div id="coordinatesContainer"></div>
       <button id="fillBackgroundTool">Fill Background</button>
        <button id="drawLineTool">Fill</button>
        <select id="penStyle">
@@ -632,9 +657,6 @@ function drawGrassPen(e) {
   const x = e.clientX - canvas.getBoundingClientRect().left;
   const y = e.clientY - canvas.getBoundingClientRect().top;
 
-  // Customize the grass pen drawing logic based on your requirements
-  // For example, you can draw short lines to simulate grass strokes
-
   ctx.beginPath();
   ctx.moveTo(x, y);
   ctx.lineTo(x + 5, y + 5); // Customize the length of grass stroke
@@ -669,9 +691,258 @@ canvas.addEventListener('click', (e) => {
   }
 });
 
+document.getElementById('sPen').addEventListener('click', () => {
+  selectedTool = 'sPen';
+  ctx.globalCompositeOperation = 'source-over'; // Default drawing mode
+});
+function drawSPen(x, y) {
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.bezierCurveTo(x + 10, y - 20, x - 10, y - 20, x, y);
+  ctx.bezierCurveTo(x + 10, y + 20, x - 10, y + 20, x, y);
+  ctx.fillStyle = selectedColor;
+  ctx.fill();
+}
+canvas.addEventListener('click', (e) => {
+  if (selectedTool === 'sPen') {
+    drawSPen(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+  }
+});
+
+document.getElementById('dmPen').addEventListener('click', () => {
+  selectedTool = 'dmPen';
+  ctx.globalCompositeOperation = 'source-over'; // Default drawing mode
+});
+
+function drawDmPen(x, y) {
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x - 5, y - 10);
+  ctx.lineTo(x, y - 15);
+  ctx.lineTo(x + 5, y - 10);
+  ctx.closePath();
+  ctx.fill();
+}
+canvas.addEventListener('click', (e) => {
+  if (selectedTool === 'dmPen') {
+    drawDmPen(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+  }
+});
+
+let selectedLeafSize = 'medium'; // Default leaf size
+// Add an event listener to the leafSize dropdown
+document.getElementById('leafSize').addEventListener('change', function () {
+  selectedLeafSize = this.value;
+});
+
+document.getElementById('leafPen').addEventListener('click', () => {
+  selectedTool = 'leafPen';
+  ctx.globalCompositeOperation = 'source-over'; // Default drawing mode
+});
+// Function to draw a leaf with the specified size at the specified coordinates
+function drawLeaf(x, y) {
+  const leafSizeMap = {
+    'small': 20,
+    'medium': 35,
+    'large': 50
+  };
+
+  const leafSize = leafSizeMap[selectedLeafSize];
+
+  ctx.fillStyle = selectedColor;
+
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.quadraticCurveTo(x - leafSize / 2, y - leafSize / 2, x, y - leafSize);
+  ctx.quadraticCurveTo(x + leafSize / 2, y - leafSize / 2, x, y);
+  ctx.fill();
+}
+
+// Event listener for the canvas click event to draw leaves
+canvas.addEventListener('click', (e) => {
+  if (selectedTool === 'leafPen') {
+    drawLeaf(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+  }
+});
+
+let selectedNoseSize = 'small'; // Default size
+document.getElementById('noseSize').addEventListener('change', function () {
+  selectedNoseSize = this.value;
+});
+
+document.getElementById('nose').addEventListener('click', () => {
+  selectedTool = 'nose';
+  ctx.globalCompositeOperation = 'source-over'; // Default drawing mode
+});
+function drawNose(x, y) {
+  const noseSizeMap = {
+    'small': 20,
+    'medium': 35,
+    'large': 50
+  };
+
+  const noseSize = noseSizeMap[selectedNoseSize];
+
+  ctx.fillStyle = selectedColor;
+
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.quadraticCurveTo(x + noseSize, y + noseSize, x, y + noseSize);
+  ctx.quadraticCurveTo(x - noseSize, y + noseSize, x, y);
+  ctx.fill();
+}
+canvas.addEventListener('click', (e) => {
+  if (selectedTool === 'nose') {
+    drawNose(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+  }
+});
+
+document.getElementById('eyeOutlinePen').addEventListener('click', () => {
+  selectedTool = 'eyeOutlinePen';
+  ctx.globalCompositeOperation = 'source-over'; // Set the drawing mode
+});
+
+// Function to draw an eye outline
+function drawEyeOutline(x, y) {
+  const eyeRadius = 25; // Customize the radius of the eye
+  const irisRadius = 8; // Customize the radius of the iris
+
+  ctx.beginPath();
+  ctx.arc(x, y, eyeRadius, 0, 2 * Math.PI); // Draw the eye outline
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.arc(x, y, irisRadius, 0, 2 * Math.PI); // Draw the iris
+  ctx.fill();
+}
+
+// Event listener to draw the eye outline on canvas click
+canvas.addEventListener('click', (e) => {
+  if (selectedTool === 'eyeOutlinePen') {
+    drawEyeOutline(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+  }
+});
+
+document.getElementById('eyelidOutlinePen').addEventListener('click', () => {
+  selectedTool = 'eyelidOutlinePen';
+  ctx.globalCompositeOperation = 'source-over'; // Set the drawing mode if needed
+});
+function drawEyelidOutline(x, y) {
+  const eyelidWidth = 30; // Customize the width of the eyelid outline
+  const eyelidHeight = 10; // Customize the height of the eyelid outline
+
+  ctx.beginPath();
+  ctx.moveTo(x - eyelidWidth / 2, y);
+  ctx.lineTo(x + eyelidWidth / 2, y);
+  ctx.lineWidth = 2; // Customize the line width as needed
+  ctx.stroke();
+}
+canvas.addEventListener('click', (e) => {
+  if (selectedTool === 'eyelidOutlinePen') {
+    drawEyelidOutline(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+  }
+});
+
+  // Function to draw a human head outline
+  function drawHeadOutline(x, y) {
+    const headRadius = 30; // Customize the head size as needed
+
+    // Draw the head outline
+    ctx.beginPath();
+    ctx.arc(x, y - headRadius, headRadius, 0, 2 * Math.PI);
+    ctx.stroke();
+
+    // Draw facial features (eyes, nose, mouth, etc.) as needed
+    // Customize the coordinates and shapes based on your design
+    ctx.beginPath();
+    ctx.arc(x - 10, y - headRadius - 10, 5, 0, 2 * Math.PI); // Left eye
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(x + 10, y - headRadius - 10, 5, 0, 2 * Math.PI); // Right eye
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(x - 5, y - headRadius + 5); // Mouth
+    ctx.lineTo(x + 5, y - headRadius + 5);
+    ctx.stroke();
+  }
+
+  // Event listener for the human head outline button
+  document.getElementById('headOutlinePen').addEventListener('click', () => {
+    selectedTool = 'headOutlinePen';
+    ctx.globalCompositeOperation = 'source-over'; // Default drawing mode
+  });
+
+  // Event listener for drawing the head outline on canvas click
+  canvas.addEventListener('click', (e) => {
+    if (selectedTool === 'headOutlinePen') {
+      drawHeadOutline(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+    }
+  });
+
+document.getElementById('doorPen').addEventListener('click', () => {
+  selectedTool = 'doorPen';
+  ctx.globalCompositeOperation = 'source-over'; // Default drawing mode
+});
+function drawDoorPen(x, y) {
+  const doorWidth = 80;
+  const doorHeight = 100;
+
+  ctx.fillStyle = selectedColor;
+  ctx.fillRect(x - doorWidth / 2, y - doorHeight / 2, doorWidth, doorHeight);
+}
+canvas.addEventListener('click', (e) => {
+  if (selectedTool === 'doorPen') {
+    drawDoorPen(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+  }
+});
+
+  document.getElementById('insertTextButton').addEventListener('click', () => {
+    const text = prompt('Enter the text to insert:');
+    if (text !== null) {
+      const x = prompt('Enter the X coordinate (in pixels):');
+      const y = prompt('Enter the Y coordinate (in pixels):');
+      if (x !== null && y !== null) {
+        drawText(parseInt(x), parseInt(y), text);
+      }
+    }
+  });
+
+  function drawText(x, y, text) {
+    ctx.font = '16px Arial'; // You can customize the font style and size
+    ctx.fillStyle = selectedColor;
+    ctx.fillText(text, x, y);
+  }
+
+// Get the toggle coordinates button element
+const toggleCoordinatesButton = document.getElementById('toggleCoordinatesButton');
+
+// Event listener for the toggle coordinates button click
+toggleCoordinatesButton.addEventListener('click', toggleCoordinates);
+
+// Function to toggle the visibility of the coordinates
+function toggleCoordinates() {
+  const coordinatesContainer = document.getElementById('coordinatesContainer');
+
+  // Toggle the visibility of the coordinates container
+  coordinatesContainer.style.display = (coordinatesContainer.style.display === 'none') ? 'block' : 'none';
+}
+
+// Event listener for the canvas mousemove event to update coordinates
+canvas.addEventListener('mousemove', updateCoordinates);
+
+// Function to update the coordinates based on the mouse cursor position
+function updateCoordinates(e) {
+  const x = e.clientX - canvas.getBoundingClientRect().left;
+  const y = e.clientY - canvas.getBoundingClientRect().top;
+
+  // Display the coordinates on the canvas
+  const coordinatesContainer = document.getElementById('coordinatesContainer');
+  coordinatesContainer.textContent = `X: ${x.toFixed(2)}, Y: ${y.toFixed(2)}`;
+}
+
 //______
-
-
   </script>
 </body>
 </html>
