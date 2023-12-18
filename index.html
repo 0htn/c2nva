@@ -46,6 +46,12 @@
       <canvas id="mainCanvas" width="800" height="960"></canvas>
     </div>
     <div class="tools">
+<label for="eye1Width">Width (+/- for both side):</label>
+<input type="number" id="eye1Width" value="160">
+<label for="eye1Height">Height:</label>
+<input type="number" id="eye1Height" value="40">
+<button id="longEyeLidShapeButton">Long Eye Lip Shape</button>
+
       <button id="penTool">Pen</button>
       <button id="smoothPenTool">Smooth Pen</button>
       <button id="fcPenTool">Fountain-Flower-Curtain-Stair-Shelf-MarkPoint Pen</button>
@@ -69,7 +75,6 @@
 </select>
 <button id="nose">Nose-Lamp-Dress-Chocolate Pen</button>
 <button id="eyeOutlinePen">Eye Outline Pen</button>
-<button id="eyelidOutlinePen">Eyelid Outline Pen</button>
 <button id="headOutlinePen">Head Outline Pen</button>
 <button id="doorPen">Door Pen</button>
      <button id="dmPen">Diamond Shape</button>
@@ -822,26 +827,6 @@ canvas.addEventListener('click', (e) => {
   }
 });
 
-document.getElementById('eyelidOutlinePen').addEventListener('click', () => {
-  selectedTool = 'eyelidOutlinePen';
-  ctx.globalCompositeOperation = 'source-over'; // Set the drawing mode if needed
-});
-function drawEyelidOutline(x, y) {
-  const eyelidWidth = 30; // Customize the width of the eyelid outline
-  const eyelidHeight = 10; // Customize the height of the eyelid outline
-
-  ctx.beginPath();
-  ctx.moveTo(x - eyelidWidth / 2, y);
-  ctx.lineTo(x + eyelidWidth / 2, y);
-  ctx.lineWidth = 2; // Customize the line width as needed
-  ctx.stroke();
-}
-canvas.addEventListener('click', (e) => {
-  if (selectedTool === 'eyelidOutlinePen') {
-    drawEyelidOutline(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
-  }
-});
-
   // Function to draw a human head outline
   function drawHeadOutline(x, y) {
     const headRadius = 30; // Customize the head size as needed
@@ -940,6 +925,29 @@ function updateCoordinates(e) {
   const coordinatesContainer = document.getElementById('coordinatesContainer');
   coordinatesContainer.textContent = `X: ${x.toFixed(2)}, Y: ${y.toFixed(2)}`;
 }
+
+document.getElementById('longEyeLidShapeButton').addEventListener('click', () => {
+  selectedTool = 'longEyeLidShape';
+  ctx.globalCompositeOperation = 'source-over'; // Default drawing mode
+});
+
+function drawLongEyeLidShape(x, y) {
+  const eye1Width = parseFloat(document.getElementById('eye1Width').value);
+  const eye1Height = parseFloat(document.getElementById('eye1Height').value);
+
+  ctx.beginPath();
+  ctx.moveTo(x - eye1Width / 2, y);
+  ctx.quadraticCurveTo(x, y - eye1Height / 2, x , y);
+  ctx.quadraticCurveTo(x, y + eye1Height / 2, x , y);
+  ctx.closePath();
+  ctx.fill();
+}
+
+canvas.addEventListener('click', (e) => {
+  if (selectedTool === 'longEyeLidShape') {
+    drawLongEyeLidShape(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+  }
+});
 
 //______
 
