@@ -46,14 +46,28 @@
       <canvas id="mainCanvas" width="800" height="960"></canvas>
     </div>
     <div class="tools">
+
+      <button id="penTool">Pen</button>
+      <button id="smoothPenTool">Smooth Pen</button>
+
 <label for="eye1Width">Width (+/- for both side):</label>
 <input type="number" id="eye1Width" value="160">
 <label for="eye1Height">Height:</label>
 <input type="number" id="eye1Height" value="40">
-<button id="longEyeLidShapeButton">Long Eye Lip Shape</button>
+<button id="longEyeLidShapeButton">Long Eye Lid Shape</button>
 
-      <button id="penTool">Pen</button>
-      <button id="smoothPenTool">Smooth Pen</button>
+<label for="eye2Width">Width (+/- for both side):</label>
+<input type="number" id="eye2Width" value="100">
+<label for="eye2Height">Height (+/- for both side):</label>
+<input type="number" id="eye2Height" value="20">
+<button id="underEyeLidShapeButton">Under Eye Lid Shape</button>
+
+<label for="eyeWidth">Width:</label>
+<input type="number" id="eyeWidth" value="100">
+<label for="eyeHeight">Height:</label>
+<input type="number" id="eyeHeight" value="90">
+<button id="longEyeShapeButton">Long Eye Shape</button>
+
       <button id="fcPenTool">Fountain-Flower-Curtain-Stair-Shelf-MarkPoint Pen</button>
        <button id="grassPenTool">Grass-Tree-Eyebrow-Eye-Light-QuickColor Pen</button>
        <button id="flowerPenTool">Flower Pen</button>
@@ -946,6 +960,52 @@ function drawLongEyeLidShape(x, y) {
 canvas.addEventListener('click', (e) => {
   if (selectedTool === 'longEyeLidShape') {
     drawLongEyeLidShape(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+  }
+});
+
+document.getElementById('underEyeLidShapeButton').addEventListener('click', () => {
+  selectedTool = 'underEyeLidShape';
+  ctx.globalCompositeOperation = 'source-over'; // Default drawing mode
+});
+
+function drawUnderEyeLidShape(x, y) {
+  const eye2Width = parseFloat(document.getElementById('eye2Width').value);
+  const eye2Height = parseFloat(document.getElementById('eye2Height').value);
+
+  ctx.beginPath();
+  ctx.moveTo(x - eye2Width / 2, y);
+  ctx.quadraticCurveTo(x, y, x + eye2Width / 2, y);
+  ctx.quadraticCurveTo(x, y + eye2Height / 2, x - eye2Width / 2, y);
+  ctx.closePath();
+  ctx.fill();
+}
+
+canvas.addEventListener('click', (e) => {
+  if (selectedTool === 'underEyeLidShape') {
+    drawUnderEyeLidShape(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+  }
+});
+
+document.getElementById('longEyeShapeButton').addEventListener('click', () => {
+  selectedTool = 'longEyeShape';
+  ctx.globalCompositeOperation = 'source-over'; // Default drawing mode
+});
+
+function drawLongEyeShape(x, y) {
+  const eyeWidth = parseFloat(document.getElementById('eyeWidth').value);
+  const eyeHeight = parseFloat(document.getElementById('eyeHeight').value);
+
+  ctx.beginPath();
+  ctx.moveTo(x - eyeWidth / 2, y);
+  ctx.quadraticCurveTo(x, y - eyeHeight / 2, x + eyeWidth / 2, y);
+  ctx.quadraticCurveTo(x, y + eyeHeight / 2, x - eyeWidth / 2, y);
+  ctx.closePath();
+  ctx.fill();
+}
+
+canvas.addEventListener('click', (e) => {
+  if (selectedTool === 'longEyeShape') {
+    drawLongEyeShape(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
   }
 });
 
